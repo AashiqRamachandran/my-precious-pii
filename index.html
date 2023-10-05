@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            padding: 30px;
+        }
+
+        .content-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        img {
+            border-radius: 50%;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+        }
+
+        input[type=text] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content-container">
+        <h2>My Precious PII</h2>
+        <img src="https://e1.pxfuel.com/desktop-wallpaper/560/665/desktop-wallpaper-gollum-bad-smeagol-good-peter-jackson-defends-turkish-doctor-s-tweet-gollum-smeagol.jpg" alt="Gollum" width="200" height="200">
+
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="myText" placeholder="Enter your text">
+            <button onclick="callAPI()">Submit</button>
+        </div>
+
+        <p id="response"></p>
+
+    </div>
+
+    <script>
+        function callAPI() {
+            var xhr = new XMLHttpRequest();
+            var url = "https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer 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");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var json = JSON.parse(xhr.responseText);
+                    document.getElementById("response").innerHTML = json[0].generated_text;
+                }
+            };
+            var data = JSON.stringify({ "inputs": document.getElementById("myText").value });
+            xhr.send(data);
+        }
+    </script>
+
+</body>
+
+</html>
