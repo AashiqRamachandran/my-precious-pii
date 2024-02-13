@@ -35,7 +35,7 @@
             border: none;
         }
 
-        input[type=text] {
+        input[type=text], select {
             width: 100%;
             padding: 15px;
             margin: 5px 0 22px 0;
@@ -44,7 +44,7 @@
             background: #f1f1f1;
         }
 
-        input[type=text]:focus {
+        input[type=text]:focus, select:focus {
             background-color: #ddd;
             outline: none;
         }
@@ -57,6 +57,12 @@
         <img src="https://e1.pxfuel.com/desktop-wallpaper/560/665/desktop-wallpaper-gollum-bad-smeagol-good-peter-jackson-defends-turkish-doctor-s-tweet-gollum-smeagol.jpg" alt="Gollum" width="200" height="200">
 
         <div style="margin-bottom: 20px;">
+            <select id="apiEndpoint">
+                <option value="https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii">Vulnerable GPT-2</option>
+                <option value="https://api-inference.huggingface.co/models/TensaZangetsu/condensed-bert-vulnerable">Vulnerable BERT</option>
+                <option value="https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii-gpt-2-secure">Secure GPT</option>
+                <!-- Add more endpoints as needed -->
+            </select>
             <input type="text" id="myText" placeholder="Enter your text">
             <button onclick="callAPI()">Submit</button>
         </div>
@@ -68,7 +74,7 @@
     <script>
         function callAPI() {
             var xhr = new XMLHttpRequest();
-            var url = "https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii";
+            var url = document.getElementById("apiEndpoint").value; // Use selected API endpoint
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.setRequestHeader("Authorization", "Bearer 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");
