@@ -1,88 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f1f1f1;
-            padding: 30px;
-        }
-
-        .content-container {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        img {
-            border-radius: 50%;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border: none;
-        }
-
-        input[type=text] {
-            width: 100%;
-            padding: 15px;
-            margin: 5px 0 22px 0;
-            display: inline-block;
-            border: none;
-            background: #f1f1f1;
-        }
-
-        input[type=text]:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-    </style>
+    <!-- Include Tailwind CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<body class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200">
+    <div class="content-container mx-auto text-center max-w-xl p-8">
+        <h2 class="text-2xl font-bold mb-4">My Precious PII</h2>
+        <img src="your-image-url" alt="Gollum" class="w-48 h-48 rounded-full mx-auto">
 
-<body>
-    <div class="content-container">
-        <h2>My Precious PII</h2>
-        <img src="https://e1.pxfuel.com/desktop-wallpaper/560/665/desktop-wallpaper-gollum-bad-smeagol-good-peter-jackson-defends-turkish-doctor-s-tweet-gollum-smeagol.jpg" alt="Gollum" width="200" height="200">
-
-        <div style="margin-bottom: 20px;">
-            <input type="text" id="myText" placeholder="Enter your text">
-            <button onclick="callAPI()">Submit</button>
+        <div class="mb-5">
+            <input type="text" id="myText" placeholder="Enter your text" class="w-full p-3 my-2 border-none bg-gray-200 dark:bg-gray-700 focus:bg-gray-300 dark:focus:bg-gray-600">
+            <button id="submitButton" onclick="callAPI()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">Submit</button>
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="hidden">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
+                </svg>
+            </div>
         </div>
 
         <p id="response"></p>
-
     </div>
 
     <script>
-        function callAPI() {
+        function callAPI(inputText = null) {
+            // Show the spinner
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('submitButton').disabled = true;
+
             var xhr = new XMLHttpRequest();
             var url = "https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii";
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer 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");
+            xhr.setRequestHeader("Authorization", "Bearer your_token_here");
             xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var json = JSON.parse(xhr.responseText);
-                    document.getElementById("response").innerHTML = json[0].generated_text;
+                if (xhr.readyState === 4) {
+                    // Hide the spinner and enable the button
+                    document.getElementById('loadingSpinner').classList.add('hidden');
+                    document.getElementById('submitButton').disabled = false;
+
+                    if(xhr.status === 200) {
+                        var json = JSON.parse(xhr.responseText);
+                        document.getElementById("response").innerHTML = json[0].generated_text;
+                    } else {
+                        document.getElementById("response").innerHTML = "Error: " + xhr.status;
+                    }
                 }
             };
-            var data = JSON.stringify({ "inputs": document.getElementById("myText").value });
+            var data = JSON.stringify({ "inputs": inputText ? inputText : document.getElementById("myText").value });
             xhr.send(data);
         }
+
+        // Automatically call the API with a predefined string when the page loads
+        window.onload = function() {
+            const initialText = "We wants it, we needs it. Must have the precious. They stole it from us. Sneaky little hobbitses. Wicked, tricksy, false!";
+            callAPI(initialText);
+        };
     </script>
-
 </body>
-
 </html>
