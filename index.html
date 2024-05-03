@@ -6,12 +6,12 @@
     <title>Home</title>
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 </head>
 <body class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-200">
     <div class="content-container mx-auto text-center max-w-xl p-8">
         <h2 class="text-2xl font-bold mb-4">My Precious PII</h2>
         <img src="your-image-url" alt="Gollum" class="w-48 h-48 rounded-full mx-auto">
-
         <div class="mb-5">
             <input type="text" id="myText" placeholder="Enter your text" class="w-full p-3 my-2 border-none bg-gray-200 dark:bg-gray-700 focus:bg-gray-300 dark:focus:bg-gray-600">
             <button id="submitButton" onclick="callAPI()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">Submit</button>
@@ -22,8 +22,8 @@
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
                 </svg>
             </div>
-        </div>
 
+        </div>
         <p id="response"></p>
     </div>
 
@@ -34,7 +34,7 @@
             document.getElementById('submitButton').disabled = true;
 
             var xhr = new XMLHttpRequest();
-            var url = "https://api-inference.huggingface.co/models/TensaZangetsu/my-precious-pii";
+            var url = document.getElementById("apiEndpoint").value; // Use selected API endpoint
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.setRequestHeader("Authorization", "Bearer your_token_here");
